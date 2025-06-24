@@ -59,10 +59,17 @@ ex) #이슈번호, #이슈번호
 ┃ ┗ 📜schema.prisma
 ┣ 📂src/
 ┃ ┣ 📂controllers/
-┃ ┣ 📂services/
-┃ ┣ 📂repositories/
-┃ ┣ 📂dtos/
+┃ ┃ ┗ 📜user.controller.js
 ┃ ┣ 📂sockets/
+┃ ┃ ┗ 📜raspi.socket.js
+┃ ┣ 📂services/
+┃ ┃ ┗ 📜user.services.js
+┃ ┣ 📂repositories/
+┃ ┃ ┗ 📜user.repository.js
+┃ ┣ 📂dtos/
+┃ ┃ ┗ 📜user.dto.js
+┃ ┣ 📂sockets/
+┃ ┃ ┗ 📜user.socket.js
 ┃ ┣ 📂middlewares/
 ┃ ┣ 📂utils/
 ┃ ┣ 📂db/
