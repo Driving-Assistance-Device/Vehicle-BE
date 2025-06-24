@@ -70,5 +70,5 @@ ex) #이슈번호, #이슈번호
 ┃ ┃ ┗ 📜redis.js
 ┃ ┗ 📜app.js
 ┣ 📜.env
-┣ 📜README.md
+┗ 📜README.md
 ```
