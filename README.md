@@ -54,30 +54,21 @@ ex) #이슈번호, #이슈번호
 ## 프로젝트 구조
 
 ```markdown
-📦 project
-┣ 📂.node_module
-┣ 📂.vscode
-┃ ┗ 📜settings.json
+📦 project/
 ┃ 📂prisma
 ┃ ┗ 📜schema.prisma
-┃ 📂public
-┣ 📂src
-┃ ┣ 📂controllers
-┃ ┃ ┗ 📜user.controller.js
-┃ ┣ 📂sockets
-┃ ┃ ┗ 📜raspi.socket.js
-┃ ┣ 📂services
-┃ ┃ ┗ 📜user.services.js
-┃ ┣ 📂repositories
-┃ ┃ ┗ 📜user.repository.js
-┃ ┣ 📂dtos
-┃ ┃ ┗ 📜user.dto.js
-┃ ┣📜db.config.js
-┃ ┣📜error.js
-┃ ┗📜index.js
+┣ 📂src/
+┃ ┣ 📂controllers/
+┃ ┣ 📂services/
+┃ ┣ 📂repositories/
+┃ ┣ 📂dtos/
+┃ ┣ 📂sockets/
+┃ ┣ 📂middlewares/
+┃ ┣ 📂utils/
+┃ ┣ 📂db/
+┃ ┃ ┣ 📜db.config.js
+┃ ┃ ┗ 📜redis.js
+┃ ┗ 📜app.js
 ┣ 📜.env
-┣ 📜.gitignore
-┣ 📜package-lock.json
-┣ 📜package.json
-┗ 📜README.md
+┣ 📜README.md
 ```
