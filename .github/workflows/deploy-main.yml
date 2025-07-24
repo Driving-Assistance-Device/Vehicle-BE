@@ -48,7 +48,6 @@ jobs:
         run: |
           ssh mju-driving 'cd /opt/app; pnpm install'
           ssh mju-driving 'cd /opt/app; pnpm exec prisma generate'
-          ssh mju-driving 'cd /opt/app; pnpm run build'
 
       - name: Apply prisma migrations
         if: steps.paths-filter.outputs.prisma == 'true'
@@ -59,7 +58,7 @@ jobs:
         run: |
           ssh mju-driving '
             echo "[Unit]
-            Description=UMC 7th Project
+            Description=MJU RATS Project
             After=network.target
 
             [Service]

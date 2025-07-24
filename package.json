@@ -6,7 +6,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsx scripts/build.ts",
     "start": "node src/index.js",
     "dev": "nodemon -e js,json,prisma --exec \"prisma generate && node src/index.js\""
   },
