@@ -63,7 +63,7 @@ jobs:
 
             [Service]
             User=${USER}
-            ExecStart=/usr/bin/pnpm start --prefix /opt/app/
+            ExecStart=/usr/local/bin/pnpm start --prefix /opt/app/
             Restart=always
 
             [Install]
