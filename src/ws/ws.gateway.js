@@ -1,0 +1,20 @@
+import { WebSocketServer } from "ws";
+import { handleSocketMessage } from "./ws.controller";
+
+export const initializeWebSocket = (server) => {
+  const wss = new WebSocketServer({ server });
+
+  wss.on("connection", (ws) => {
+    console.log("New WebSocket connection established");
+
+    ws.on("message", async (raw) => {
+      try {
+        const message = JSON.parse(raw.toString());
+        const response = await handleSocketMessage(message);
+        ws.send(JSON.stringify({ status: "success", data: response }));
+      } catch (err) {
+        ws.send(JSON.stringify({ status: "error", error: err.message }));
+      }
+    });
+  });
+};

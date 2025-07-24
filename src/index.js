@@ -4,6 +4,7 @@ import cors from "cors";
 import fs from "fs";
 import path from "path";
 import HTTPS from "https";
+import { initializeWebSocket } from "./ws/ws.gateway.js";
 import swaggerAutogen from "swagger-autogen";
 import swaggerUiExpress from "swagger-ui-express";
 import { handleUserSignUp } from "./controllers/user.controller.js";
@@ -93,7 +94,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-const isSSL = process.env.SSL_ENABLED === "true";
 if (isSSL) {
   const option = {
     ca: fs.readFileSync("./keys/fullchain.pem"),
@@ -105,11 +105,17 @@ if (isSSL) {
       .toString(),
   };
 
-  HTTPS.createServer(option, app).listen(port, () => {
-    console.log(`[HTTPS] Server is runnig on port ${port}`);
+  const httpsServer = HTTPS.createServer(option, app);
+
+  initializeWebSocket(httpsServer);
+
+  httpsServer.listen(port, () => {
+    console.log(`[HTTPS+WS] Server is running on port ${port}`);
   });
 } else {
-  app.listen(port, () => {
+  const httpServer = app.listen(port, () => {
     console.log(`[HTTP] Server is running on http://localhost:${port}`);
   });
+
+  initializeWebSocket(httpServer);
 }
