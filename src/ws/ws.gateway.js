@@ -1,5 +1,5 @@
 import { WebSocketServer } from "ws";
-import { handleSocketMessage } from "./ws.controller";
+import { handleSocketMessage } from "./ws.controller.js";
 
 export const initializeWebSocket = (server) => {
   const wss = new WebSocketServer({ server });

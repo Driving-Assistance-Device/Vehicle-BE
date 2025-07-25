@@ -94,6 +94,8 @@ app.use((err, req, res, next) => {
   });
 });
 
+const isSSL = process.env.SSL_ENABLED === "true";
+
 if (isSSL) {
   const option = {
     ca: fs.readFileSync("./keys/fullchain.pem"),
