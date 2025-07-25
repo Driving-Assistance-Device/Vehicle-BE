@@ -9,13 +9,43 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  username  String   @unique @db.VarChar(255)
-  email     String   @unique(map: "email") @db.VarChar(255)
+  name      String   @db.VarChar(25)
+  email     String   @unique(map: "email") @db.VarChar(100)
   password  String   @db.VarChar(255)
-  avatar    String?  @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at") @db.DateTime(6)
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.DateTime(6)
+  Riding    Riding[]
 
   @@map("user")
+}
+
+model Vehicle {
+  id     Int      @id @default(autoincrement())
+  status Boolean  @default(false)
+  Riding Riding[]
+
+  @@map("vehicle")
+}
+
+model Riding {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @db.Int
+  user      User     @relation(fields: [userId], references: [id])
+  vehicleId Int      @db.Int
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+  headway   Int      @db.Int
+  bias      Int      @db.Int
+  mileage   Float    @db.Float
+  startTime DateTime @db.DateTime(6)
+  endTime   DateTime @db.DateTime(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.DateTime(6)
+  Eyes      Eyes[]
+}
+
+model Eyes {
+  id       Int    @id @default(autoincrement())
+  ridingId Int    @db.Int
+  riding   Riding @relation(fields: [ridingId], references: [id])
+  left     Int    @db.Int
+  right    Int    @db.Int
+  front    Int    @db.Int
 }
