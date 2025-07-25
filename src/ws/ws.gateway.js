@@ -2,7 +2,7 @@ import { WebSocketServer } from "ws";
 import { handleSocketMessage } from "./ws.controller.js";
 
 export const initializeWebSocket = (server) => {
-  const wss = new WebSocketServer({ server });
+  const wss = new WebSocketServer({ server }, {path: "/ws"});
 
   wss.on("connection", (ws) => {
     console.log("New WebSocket connection established");
