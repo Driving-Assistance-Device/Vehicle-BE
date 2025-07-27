@@ -6,9 +6,7 @@ export const userSignUp = async (data) => {
   const UserId = await addUser({
     email: data.email,
     name: data.name,
-    username: data.username,
     password: data.password,
-    avatar: data.avatar || null,
   });
 
   if (UserId === null) {

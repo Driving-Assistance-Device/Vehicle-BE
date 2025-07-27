@@ -8,25 +8,26 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(25)
-  email     String   @unique(map: "email") @db.VarChar(100)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @map("created_at") @db.DateTime(6)
-  Riding    Riding[]
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(25)
+  email        String    @unique(map: "email") @db.VarChar(100)
+  password     String    @db.VarChar(255)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.DateTime(6)
+  refreshToken String?   @db.VarChar(500)
+  Drivings     Driving[]
 
   @@map("user")
 }
 
 model Vehicle {
-  id     Int      @id @default(autoincrement())
-  status Boolean  @default(false)
-  Riding Riding[]
+  id       Int       @id @default(autoincrement())
+  status   Boolean   @default(false)
+  Drivings Driving[]
 
   @@map("vehicle")
 }
 
-model Riding {
+model Driving {
   id        Int      @id @default(autoincrement())
   userId    Int      @db.Int
   user      User     @relation(fields: [userId], references: [id])
@@ -39,13 +40,17 @@ model Riding {
   endTime   DateTime @db.DateTime(6)
   createdAt DateTime @default(now()) @map("created_at") @db.DateTime(6)
   Eyes      Eyes[]
+
+  @@map("driving")
 }
 
 model Eyes {
-  id       Int    @id @default(autoincrement())
-  ridingId Int    @db.Int
-  riding   Riding @relation(fields: [ridingId], references: [id])
-  left     Int    @db.Int
-  right    Int    @db.Int
-  front    Int    @db.Int
+  id        Int     @id @default(autoincrement())
+  drivingId Int     @db.Int
+  driving   Driving @relation(fields: [drivingId], references: [id])
+  left      Int     @db.Int
+  right     Int     @db.Int
+  front     Int     @db.Int
+
+  @@map("eyes")
 }

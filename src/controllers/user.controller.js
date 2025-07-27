@@ -15,13 +15,11 @@ export const handleUserSignUp = async (req, res, next) => {
           schema: {
             type: 'object',
             properties: {
-              email: { type: 'string', example: 'email@email.com' },
               name: { type: 'string', example: '이름' },
-              username: { type: 'string', example: '아이디' },
+              email: { type: 'string', example: 'email@email.com' },
               password: { type: 'string', example: '비밀번호' },
-              avatar: { type: 'string', example: 'https://example.com/avatar.png' }
             },
-            required: ['email', 'name', 'username', 'password']
+            required: ['email', 'name', 'password']
           }
         }
       }
@@ -40,13 +38,10 @@ export const handleUserSignUp = async (req, res, next) => {
                 type: 'object',
                 properties: {
                   id: { type: 'number', example: 1 },
-                  email: { type: 'string', example: 'email@email.com' },
                   name: { type: 'string', example: '이름' },
-                  username: { type: 'string', example: '아이디' },
+                  email: { type: 'string', example: 'email@email.com' },
                   password: { type: 'string', example: '비밀번호' },
-                  avatar: { type: 'string', example: 'https://example.com/avatar.png' },
                   createdAt: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
-                  updatedAt: { type: 'string', example: '2023-01-01T00:00:00.000Z' }
                 }
               }
             }
