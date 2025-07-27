@@ -49,7 +49,7 @@ app.use(
       swaggerOptions: {
         url: "/openapi.json",
       },
-    }
+    },
   )
 );
 
@@ -70,6 +70,20 @@ app.get("/openapi.json", async (req, res, next) => {
       description: "시각 장애인을 위한 차량 보조 서비스",
     },
     host: `${protocol}://${host}`,
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   };
 
   const result = await swaggerAutogen(options)(outputFile, routes, doc);
