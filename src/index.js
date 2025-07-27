@@ -7,7 +7,7 @@ import HTTPS from "https";
 import { initializeWebSocket } from "./ws/ws.gateway.js";
 import swaggerAutogen from "swagger-autogen";
 import swaggerUiExpress from "swagger-ui-express";
-import { handleUserSignUp } from "./controllers/user.controller.js";
+import apiRoute from "./routes/index.js";
 
 dotenv.config();
 
@@ -49,7 +49,7 @@ app.use(
       swaggerOptions: {
         url: "/openapi.json",
       },
-    }
+    },
   )
 );
 
@@ -70,17 +70,27 @@ app.get("/openapi.json", async (req, res, next) => {
       description: "시각 장애인을 위한 차량 보조 서비스",
     },
     host: `${protocol}://${host}`,
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   };
 
   const result = await swaggerAutogen(options)(outputFile, routes, doc);
   res.json(result ? result.data : null);
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.post("/v1/api/signup", handleUserSignUp);
+app.use("/v1/api/", apiRoute);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) {
