@@ -1,0 +1,39 @@
+export const responseFromDrivingStart = ({ driving, device }) => {
+  return {
+    drivingId: driving.id,
+    status: device.status,
+    mileage: 0,
+    startTime: driving.startTime,
+    endTime: driving.endTime,
+    left: 0,
+    right: 0,
+    front: 0,
+    createdAt: driving.createdAt,
+  };
+};
+
+export const responseFromDrivingStatus = ({ payload, device, driving }) => {
+  return {
+    drivingId: payload.drivingId,
+    status: device.status,
+    mileage: payload.mileage,
+    startTime: driving.startTime,
+    endTime: new Date(),
+    left: payload.left,
+    right: payload.right,
+    front: payload.front,
+  };
+};
+
+export const responseFromDrivingEnd = ({ driving, device, eyes }) => {
+  return {
+    drivingId: driving.id,
+    status: device.status,
+    mileage: driving.mileage,
+    startTime: driving.startTime,
+    endTime: driving.endTime,
+    left: eyes.left,
+    right: eyes.right,
+    front: eyes.front,
+  };
+};

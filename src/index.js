@@ -8,6 +8,7 @@ import { initializeWebSocket } from "./ws/ws.gateway.js";
 import swaggerAutogen from "swagger-autogen";
 import swaggerUiExpress from "swagger-ui-express";
 import apiRoute from "./routes/index.js";
+import { addDevice } from "./repositories/driving.repository.js";
 
 dotenv.config();
 
@@ -90,6 +91,12 @@ app.get("/openapi.json", async (req, res, next) => {
   res.json(result ? result.data : null);
 });
 
+app.post("/v1/api/device", (req, res) => {
+  addDevice({
+    status: false,
+  });
+  res.status(200).send("임시용 디바이스 등록");
+});
 app.use("/v1/api/", apiRoute);
 
 app.use((err, req, res, next) => {
