@@ -37,12 +37,13 @@ export const handleSignUp = async (req, res, next) => {
               success: {
                 type: 'object',
                 properties: {
-                  id: { type: 'number', example: 1 },
+                  userId: { type: 'number', example: 1 },
                   name: { type: 'string', example: '이름' },
                   email: { type: 'string', example: 'email@email.com' },
                   refreshToken: { type: 'string', example: 'refreshToken' },
                   password: { type: 'string', example: '비밀번호' },
                   createdAt: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+                  updatedAt: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
                 }
               }
             }
@@ -105,7 +106,7 @@ export const handleSignUp = async (req, res, next) => {
   }
 };
 export const handleSignIn = async (req, res, next) => {
-    /*
+  /*
     #swagger.tags = ['Auth']
     #swagger.summary = '로그인'
     #swagger.description = '로그인을 위한 API입니다. 이메일, 비밀번호를 포함해 요청해야 합니다.'
@@ -138,7 +139,7 @@ export const handleSignIn = async (req, res, next) => {
               success: {
                 type: 'object',
                 properties: {
-                  id: { type: 'number', example: 1 },
+                  userId: { type: 'number', example: 1 },
                   name: { type: 'string', example: '이름' },
                   accessToken: { type: 'string', example: 'accessToken' },
                   refreshToken: { type: 'string', example: 'refreshToken' },
@@ -243,7 +244,7 @@ export const handleSignOut = async (req, res, next) => {
   }
 };
 export const handleRefresh = async (req, res, next) => {
-/*
+  /*
     #swagger.tags = ['Auth']
     #swagger.summary = '리프레시 토큰 갱신'
     #swagger.description = '리프레시 토큰을 갱신하기 위한 API입니다.'
@@ -275,7 +276,7 @@ export const handleRefresh = async (req, res, next) => {
               success: {
                 type: 'object',
                 properties: {
-                  id: { type: 'number', example: 1 },
+                  userId: { type: 'number', example: 1 },
                   name: { type: 'string', example: '이름' },
                   accessToken: { type: 'string', example: 'accessToken' },
                   refreshToken: { type: 'string', example: 'refreshToken' },
@@ -320,7 +321,7 @@ export const handleRefresh = async (req, res, next) => {
   }
 };
 export const handleProtect = async (req, res, next) => {
-    /*
+  /*
     #swagger.tags = ['Auth']
     #swagger.summary = '엑세스 토큰 확인'
     #swagger.description = '엑세스 토큰을 확인하기 위한 API입니다.'
