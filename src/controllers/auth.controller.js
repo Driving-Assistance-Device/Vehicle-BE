@@ -302,12 +302,8 @@ export const handleSignOut = async (req, res, next) => {
     }
 */
   try {
-    if (req.user && req.user.userId) {
-      const auth = await signOut(req.user.userId);
-      res.status(StatusCodes.OK).success(auth);
-    } else {
-      throw new Error("User not authenticated");
-    }
+    await signOut(req.user.userId);
+    res.status(StatusCodes.OK).success();
   } catch (err) {
     return next(err);
   }
@@ -334,7 +330,7 @@ export const handleRefresh = async (req, res, next) => {
     }
 
     #swagger.responses[200] = {
-      description: '로그인 성공',
+      description: '리프레시 토큰 갱신 성공',
       content: {
         'application/json': {
           schema: {
@@ -372,6 +368,29 @@ export const handleRefresh = async (req, res, next) => {
                 properties: {
                   errorCode: { type: 'string', example: 'invalid_request' },
                   reason: { type: 'string', example: '요청 데이터가 잘못되었습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
+    
+    #swagger.responses[403] = {
+      description: '유효하지 않은 리프레시 토큰입니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'not_refresh_token' },
+                  reason: { type: 'string', example: '유효하지 않은 리프레시 토큰입니다.' },
                   data: { type: 'object', example: null }
                 }
               },

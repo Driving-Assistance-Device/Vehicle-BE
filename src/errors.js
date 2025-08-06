@@ -31,6 +31,17 @@ export class NotAccessTokenError extends Error {
   }
 }
 
+export class NotRefreshTokenError extends Error {
+  errorCode = "not_refresh_token";
+
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+    this.statusCode = 403;
+  }
+}
+
 export class NotFoundError extends Error {
   errorCode = "not_found";
 
