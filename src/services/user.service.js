@@ -1,19 +1,11 @@
 import { responseFromUser } from "../dtos/user.dto.js";
-import { addUser, getUser } from "../repositories/user.repository.js";
-import { DuplicateUserEmailError } from "../errors.js";
+import { getUser } from "../repositories/user.repository.js";
 
-export const userSignUp = async (data) => {
-  const UserId = await addUser({
-    email: data.email,
-    name: data.name,
-    password: data.password,
-  });
-
-  if (UserId === null) {
-    throw new DuplicateUserEmailError("이미 존재하는 이메일입니다.", data);
+export const userProfile = async (userId) => {
+  const user = await getUser(userId);
+  if (!user) {
+    throw new Error("유저를 찾을 수 없습니다.");
   }
-
-  const user = await getUser(UserId);
   return responseFromUser({
     user,
   });
