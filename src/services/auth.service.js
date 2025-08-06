@@ -12,31 +12,32 @@ import {
 } from "../errors.js";
 import { responseFromAuth } from "../dtos/auth.dto.js";
 import { createJwt } from "../utils/jwt.util.js";
+import { createHashedPassword } from "../utils/sha256.util.js";
 
 export const signUp = async (data) => {
-  console.log(data);
-  const UserId = await addUser({
+  const hashedPassword = createHashedPassword(data.password);
+  const userId = await addUser({
     email: data.email,
     name: data.name,
-    password: data.password,
+    password: hashedPassword,
   });
 
-  if (UserId === null) {
+  if (userId === null) {
     throw new DuplicateEmailError("이미 존재하는 이메일입니다.", data);
   }
 
-  const user = await getUser(UserId);
+  const user = await getUser(userId);
   return responseFromUser({
     user,
   });
 };
 
 export const signIn = async (data) => {
+  const hashedPassword = createHashedPassword(data.password);
   const user = await getUserSignIn({
     email: data.email,
-    password: data.password,
   });
-  if (user === null) {
+  if (user === null || user.password !== hashedPassword) {
     throw new InvalidRequestError("이메일 또는 비밀번호가 일치하지 않습니다.");
   }
   const accecsToken = createJwt({ userId: user.id, type: "AT" });
