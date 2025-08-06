@@ -37,3 +37,23 @@ export const responseFromDrivingEnd = ({ driving, device, eyes }) => {
     front: eyes.front,
   };
 };
+
+export const responseFromDriving = ({ driving }) => {
+  return {
+    drivingId: driving.id,
+    mileage: driving.mileage,
+    startTime: driving.startTime,
+    endTime: driving.endTime,
+    createdAt: driving.createdAt,
+  };
+};
+
+export const responseFromDrivings = ({ drivings }) => {
+  return drivings.map((driving) => ({
+    drivingId: driving.id,
+    mileage: driving.mileage,
+    startTime: driving.startTime,
+    endTime: driving.endTime,
+    createdAt: driving.createdAt,
+  }));
+};

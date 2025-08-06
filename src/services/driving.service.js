@@ -2,7 +2,10 @@ import {
   responseFromDrivingStart,
   responseFromDrivingStatus,
   responseFromDrivingEnd,
+  responseFromDriving,
+  responseFromDrivings,
 } from "../dtos/driving.dto.js";
+import { InvalidRequestError } from "../errors.js";
 import {
   addDriving,
   getDriving,
@@ -12,6 +15,7 @@ import {
   updateDevice,
   addEyes,
   getEyes,
+  getDrivingByUserId,
 } from "../repositories/driving.repository.js";
 
 export const drivingStart = async (payload, userId) => {
@@ -143,6 +147,35 @@ export const drivingStop = async (payload) => {
   });
 };
 
-export const updateDrivingMileage = async (payload) => {};
+export const drivingOne = async (userId) => {
+  const drivings = await getDrivingByUserId(userId, null);
+  if (!drivings) {
+    throw new InvalidRequestError("No driving records found for this user.");
+  }
+  const driving = drivings[0];
+  return responseFromDriving({ driving });
+};
 
-export const updateDrivingEyes = async (payload) => {};
+export const drivingStatistics = async (userId, createdAt) => {
+  const drivings = await getDrivingByUserId(userId, createdAt);
+  if (!drivings) {
+    throw new InvalidRequestError("No driving records found for this user.");
+  }
+
+  return responseFromDrivings({ drivings });
+};
+
+export const drivingTotalCount = async (userId) => {
+  const drivings = await getDrivingByUserId(userId, null);
+  if (!drivings) {
+    throw new InvalidRequestError("No driving records found for this user.");
+  }
+  const count = drivings.length;
+  const totalDistance = drivings.reduce((acc, driving) => {
+    return acc + (driving.mileage || 0);
+  }, 0);
+  return {
+    count,
+    totalDistance,
+  };
+};

@@ -1,7 +1,5 @@
 import {
   drivingStart,
-  updateDrivingMileage,
-  updateDrivingEyes,
   drivingStatus,
   drivingStop,
 } from "../services/driving.service.js";
@@ -15,10 +13,6 @@ export const handleSocketMessage = async (message, userId) => {
       return await drivingStatus(payload);
     case "DRIVING:STOP":
       return await drivingStop(payload);
-    case "DRIVING:MILEAGE":
-      return await updateDrivingMileage(payload);
-    case "DRIVING:EYES":
-      return await updateDrivingEyes(payload);
     default:
       throw new Error("Unknown message type");
   }
