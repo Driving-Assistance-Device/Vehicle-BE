@@ -87,7 +87,7 @@ export const drivingStatus = async (payload) => {
 export const drivingStop = async (payload) => {
   // 1. payload 값이 정상적으로 다 들어오는 지 확인한다.
   const { drivingId, mileage, left, right, front } = payload;
-  console.log(payload);
+
   if (!(drivingId && mileage && left && right && front)) {
     throw new Error(
       "All fields are required: drivingId, mileage, left, right, front."
