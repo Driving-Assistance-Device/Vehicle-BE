@@ -5,8 +5,8 @@ import drivingRoute from "./driving.route.js";
 
 const router = express.Router();
 
-router.use("/user", userRoute);
 router.use("/auth", authRoute);
+router.use("/user", userRoute);
 router.use("/driving", drivingRoute);
 
 export default router;

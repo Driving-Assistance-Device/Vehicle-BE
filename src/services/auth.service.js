@@ -5,7 +5,11 @@ import {
   updateUserRefresh,
   getUserRefresh,
 } from "../repositories/auth.repository.js";
-import { DuplicateUserEmailError } from "../errors.js";
+import {
+  DuplicateEmailError,
+  InvalidRequestError,
+  NotRefreshTokenError,
+} from "../errors.js";
 import { responseFromAuth } from "../dtos/auth.dto.js";
 import { createJwt } from "../utils/jwt.util.js";
 
@@ -18,7 +22,7 @@ export const signUp = async (data) => {
   });
 
   if (UserId === null) {
-    throw new DuplicateUserEmailError("이미 존재하는 이메일입니다.", data);
+    throw new DuplicateEmailError("이미 존재하는 이메일입니다.", data);
   }
 
   const user = await getUser(UserId);
@@ -33,7 +37,7 @@ export const signIn = async (data) => {
     password: data.password,
   });
   if (user === null) {
-    throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
+    throw new InvalidRequestError("이메일 또는 비밀번호가 일치하지 않습니다.");
   }
   const accecsToken = createJwt({ userId: user.id, type: "AT" });
   const refreshToken = createJwt({ userId: user.id, type: "RT" });
@@ -44,6 +48,8 @@ export const signIn = async (data) => {
     name: user.name,
     accessToken: accecsToken,
     refreshToken: refreshToken,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 
   return responseFromAuth({
@@ -54,7 +60,7 @@ export const signIn = async (data) => {
 export const signOut = async (userId) => {
   const user = await updateUserRefresh(userId, null);
   if (user === null) {
-    throw new Error("로그아웃에 실패했습니다.");
+    throw new InvalidRequestError("로그아웃에 실패했습니다.");
   }
   return responseFromUser({
     user,
@@ -66,7 +72,7 @@ export const refresh = async (data) => {
     refreshToken: data.refreshToken,
   });
   if (user === null) {
-    throw new Error("유효하지 않은 리프레시 토큰입니다.");
+    throw new NotRefreshTokenError("유효하지 않은 리프레시 토큰입니다.");
   }
   const accessToken = createJwt({ userId: user.id, type: "AT" });
   const refreshToken = createJwt({ userId: user.id, type: "RT" });

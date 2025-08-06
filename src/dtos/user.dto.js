@@ -1,17 +1,10 @@
-export const bodyToUser = (body) => {
-  return {
-    name: body.name,
-    email: body.email,
-    password: body.password,
-  };
-};
 export const responseFromUser = ({ user }) => {
   return {
-    id: user.id,
-    email: user.email,
+    userId: user.id,
     name: user.name,
-    password: user.password,
-    hashedRefreshToken: user.hashedRefreshToken || null,
+    email: user.email,
+    refreshToken: user.refreshToken,
     createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 };

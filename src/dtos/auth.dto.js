@@ -18,22 +18,13 @@ export const bodyToRefresh = (body) => {
   };
 };
 
-export const responseFromUser = ({ user }) => {
-  return {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    password: user.password,
-    refreshToken: user.refreshToken,
-    createdAt: user.createdAt,
-  };
-};
-
 export const responseFromAuth = ({ auth }) => {
   return {
-    id: auth.id,
+    userId: auth.id,
     name: auth.name,
     accessToken: auth.accessToken,
     refreshToken: auth.refreshToken,
+    createdAt: auth.createdAt,
+    updatedAt: auth.updatedAt,
   };
 };

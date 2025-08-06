@@ -1,8 +1,9 @@
 import express from "express";
-import { handleUserSignUp } from "../controllers/user.controller.js";
+import { handleUserProfile } from "../controllers/user.controller.js";
+import { verifyAccessToken } from "../middlewares/auth.middleware.js";
 
 const route = express.Router();
 
-route.post("/signup", handleUserSignUp);
+route.get("/", verifyAccessToken, handleUserProfile);
 
 export default route;
