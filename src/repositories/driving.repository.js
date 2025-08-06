@@ -12,6 +12,28 @@ export const getDriving = async (drivingId) => {
   return driving;
 };
 
+export const getDrivingByUserId = async (userId, createdAt) => {
+  const whereClause = {
+    userId: userId,
+  };
+  if (createdAt) {
+    const date = new Date(createdAt);
+    const start = new Date(date.setHours(0, 0, 0, 0));
+    const end = new Date(date.setHours(23, 59, 59, 999));
+
+    whereClause.createdAt = {
+      gte: start,
+      lte: end,
+    };
+  }
+
+  const driving = await prisma.driving.findMany({
+    where: whereClause,
+    orderBy: { createdAt: "desc" },
+  });
+  return driving;
+};
+
 export const updateDriving = async (data) => {
   const updated = await prisma.driving.update({
     where: { id: data.id },
