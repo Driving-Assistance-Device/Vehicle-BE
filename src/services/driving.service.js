@@ -87,6 +87,7 @@ export const drivingStatus = async (payload) => {
 export const drivingStop = async (payload) => {
   // 1. payload 값이 정상적으로 다 들어오는 지 확인한다.
   const { drivingId, mileage, left, right, front } = payload;
+
   if (!(drivingId && mileage && left && right && front)) {
     throw new Error(
       "All fields are required: drivingId, mileage, left, right, front."
@@ -116,9 +117,10 @@ export const drivingStop = async (payload) => {
   const updateDrivingData = {
     id: driving.id,
     mileage,
-    bias: (right - left) / (left + right),
+    bias: ((right - left) / (left + right)) * 100,
     endTime: new Date(),
   };
+  console.log(updateDrivingData);
   const updatedDriving = await updateDriving(updateDrivingData);
 
   // 6. 눈 상태를 DB에 추가
