@@ -44,6 +44,8 @@ export const signIn = async (data) => {
     name: user.name,
     accessToken: accecsToken,
     refreshToken: refreshToken,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 
   return responseFromAuth({
