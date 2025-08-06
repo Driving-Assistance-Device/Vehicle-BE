@@ -4,7 +4,6 @@ export const getUserSignIn = async (data) => {
   const user = await prisma.user.findFirstOrThrow({
     where: {
       email: data.email,
-      password: data.password,
     },
   });
   return user;
