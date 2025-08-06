@@ -7,7 +7,7 @@ export const handleSignUp = async (req, res, next) => {
     #swagger.tags = ['Auth']
     #swagger.summary = '회원가입'
     #swagger.description = '회원가입을 위한 API입니다. 이메일, 이름, 비밀번호를 포함해 요청해야 합니다.'
-    
+    #swagger.security = []
     #swagger.requestBody = {
       required: true,
       content: {
@@ -110,7 +110,7 @@ export const handleSignIn = async (req, res, next) => {
     #swagger.tags = ['Auth']
     #swagger.summary = '로그인'
     #swagger.description = '로그인을 위한 API입니다. 이메일, 비밀번호를 포함해 요청해야 합니다.'
-
+    #swagger.security = []
     #swagger.requestBody = {
       required: true,
       content: {
@@ -231,6 +231,75 @@ export const handleSignOut = async (req, res, next) => {
         }
       }
     }
+    
+        #swagger.responses[401] = {
+      description: 'Access Token이 없습니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'unauthorized' },
+                  reason: { type: 'string', example: 'Access Token이 없습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
+    
+    #swagger.responses[403] = {
+      description: '토큰 형식이 올바르지 않습니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'not_access_token' },
+                  reason: { type: 'string', example: 'Access Token 형식이 올바르지 않거나 유효하지 않습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
+    
+    #swagger.responses[419] = {
+      description: '토큰이 만료 되었습니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'expired_access_token' },
+                  reason: { type: 'string', example: 'Access Token이 만료되었습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
 */
   try {
     if (req.user && req.user.userId) {
@@ -248,7 +317,7 @@ export const handleRefresh = async (req, res, next) => {
     #swagger.tags = ['Auth']
     #swagger.summary = '리프레시 토큰 갱신'
     #swagger.description = '리프레시 토큰을 갱신하기 위한 API입니다.'
-
+    #swagger.security = []
     #swagger.requestBody = {
       required: true,
       content: {
@@ -359,6 +428,75 @@ export const handleProtect = async (req, res, next) => {
                 properties: {
                   errorCode: { type: 'string', example: 'invalid_request' },
                   reason: { type: 'string', example: '요청 데이터가 잘못되었습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
+    
+        #swagger.responses[401] = {
+      description: 'Access Token이 없습니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'unauthorized' },
+                  reason: { type: 'string', example: 'Access Token이 없습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
+    
+    #swagger.responses[403] = {
+      description: '토큰 형식이 올바르지 않습니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'not_access_token' },
+                  reason: { type: 'string', example: 'Access Token 형식이 올바르지 않거나 유효하지 않습니다.' },
+                  data: { type: 'object', example: null }
+                }
+              },
+              success: { type: 'object', example: null }
+            }
+          }
+        }
+      }
+    }
+    
+    #swagger.responses[419] = {
+      description: '토큰이 만료 되었습니다',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              resultType: { type: 'string', example: 'FAIL' },
+              error: {
+                type: 'object',
+                properties: {
+                  errorCode: { type: 'string', example: 'expired_access_token' },
+                  reason: { type: 'string', example: 'Access Token이 만료되었습니다.' },
                   data: { type: 'object', example: null }
                 }
               },

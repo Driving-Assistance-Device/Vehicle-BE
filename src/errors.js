@@ -10,7 +10,7 @@ export class InvalidRequestError extends Error {
 }
 
 export class AuthError extends Error {
-  errorCode = "Unauthorized";
+  errorCode = "unauthorized";
 
   constructor(reason, data) {
     super(reason);
@@ -21,7 +21,7 @@ export class AuthError extends Error {
 }
 
 export class NotAccessTokenError extends Error {
-  errorCode = "Unauthorized";
+  errorCode = "not_access_token";
 
   constructor(reason, data) {
     super(reason);

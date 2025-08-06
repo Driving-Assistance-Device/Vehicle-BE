@@ -5,7 +5,7 @@ import {
   updateUserRefresh,
   getUserRefresh,
 } from "../repositories/auth.repository.js";
-import { DuplicateUserEmailError } from "../errors.js";
+import { DuplicateEmailError } from "../errors.js";
 import { responseFromAuth } from "../dtos/auth.dto.js";
 import { createJwt } from "../utils/jwt.util.js";
 
@@ -18,7 +18,7 @@ export const signUp = async (data) => {
   });
 
   if (UserId === null) {
-    throw new DuplicateUserEmailError("이미 존재하는 이메일입니다.", data);
+    throw new DuplicateEmailError("이미 존재하는 이메일입니다.", data);
   }
 
   const user = await getUser(UserId);
