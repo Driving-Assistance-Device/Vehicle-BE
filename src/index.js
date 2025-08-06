@@ -49,7 +49,7 @@ app.use(
       swaggerOptions: {
         url: "/openapi.json",
       },
-    },
+    }
   )
 );
 
@@ -73,9 +73,9 @@ app.get("/openapi.json", async (req, res, next) => {
     components: {
       securitySchemes: {
         bearerAuth: {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
@@ -108,12 +108,12 @@ const isSSL = process.env.SSL_ENABLED === "true";
 
 if (isSSL) {
   const option = {
-    ca: fs.readFileSync("./keys/fullchain.pem"),
+    ca: fs.readFileSync(process.env.CA_PATH),
     key: fs
-      .readFileSync(path.resolve(process.cwd(), "./keys/privkey.pem"), "utf8")
+      .readFileSync(path.resolve(process.cwd(), process.env.KEY_PATH), "utf8")
       .toString(),
     cert: fs
-      .readFileSync(path.resolve(process.cwd(), "./keys/cert.pem"), "utf8")
+      .readFileSync(path.resolve(process.cwd(), process.env.CERT_PATH), "utf8")
       .toString(),
   };
 
