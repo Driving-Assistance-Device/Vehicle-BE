@@ -13,33 +13,33 @@ model User {
   email        String    @unique(map: "email") @db.VarChar(100)
   password     String    @db.VarChar(255)
   createdAt    DateTime  @default(now()) @map("created_at") @db.DateTime(6)
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.DateTime(6)
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(6)
   refreshToken String?   @db.VarChar(500)
   Drivings     Driving[]
 
   @@map("user")
 }
 
-model Vehicle {
+model Device {
   id       Int       @id @default(autoincrement())
   status   Boolean   @default(false)
   Drivings Driving[]
 
-  @@map("vehicle")
+  @@map("device")
 }
 
 model Driving {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @db.Int @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
-  vehicleId Int      @db.Int @map("vehicle_id")
-  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
-  headway   Int      @db.Int
-  bias      Int      @db.Int
-  mileage   Float    @db.Float
-  startTime DateTime @db.DateTime(6) @map("start_time")
-  endTime   DateTime @db.DateTime(6) @map("end_time")
-  createdAt DateTime @default(now()) @map("created_at") @db.DateTime(6)
+  id        Int       @id @default(autoincrement())
+  userId    Int       @db.Int @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  deviceId Int        @db.Int @map("device_id")
+  device    Device    @relation(fields: [deviceId], references: [id])
+  headway   Int       @default(0) @db.Int
+  bias      Int       @default(0) @db.Int
+  mileage   Float     @default(0) @db.Float
+  startTime DateTime  @default(now()) @db.DateTime(6) @map("start_time")
+  endTime   DateTime? @db.DateTime(6) @map("end_time")
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(6)
   Eyes      Eyes[]
 
   @@map("driving")
