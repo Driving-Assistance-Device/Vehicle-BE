@@ -1,7 +1,7 @@
 import {
   responseFromDrivingStart,
   responseFromDrivingStatus,
-  responseFromDrivingEnd,
+  responseFromDrivingStop,
   responseFromDriving,
   responseFromDrivings,
 } from "../dtos/driving.dto.js";
@@ -16,6 +16,8 @@ import {
   addEyes,
   getEyes,
   getDrivingByUserId,
+  getDrivingByDeviceId,
+  getEyesByDrivingId
 } from "../repositories/driving.repository.js";
 
 export const drivingStart = async (payload, userId) => {
@@ -33,7 +35,8 @@ export const drivingStart = async (payload, userId) => {
     throw new Error("Device not found.");
   }
   // 디바이스가 사용 중인지 확인
-  if (device.status === 1) {
+  console.log("디바이스 상태", device.status);
+  if (device.status === true) {
     throw new Error("Device is already in use.");
   }
 
@@ -61,75 +64,110 @@ export const drivingStart = async (payload, userId) => {
 
 export const drivingStatus = async (payload) => {
   // 1. payload 값이 정상적으로 다 들어오는 지 확인한다.
-  const { drivingId, mileage, left, right, front } = payload;
-  if (!(drivingId && mileage >= 0 && left >= 0 && right >= 0 && front >= 0)) {
+  const { deviceId, mileage } = payload;
+  if (!(deviceId && mileage >= 0)) {
     throw new Error(
-      "All fields are required: drivingId, mileage, left, right, front."
+      "All fields are required: deviceId, mileage."
     );
   }
-
-  // 2. drivingId로 driving을 가져옴
-  const driving = await getDriving(drivingId);
-  if (!driving) {
-    throw new Error("Driving not found.");
+  // 2. deviceId로 디바이스 정보를 가져옴
+  const device = await getDevice(deviceId);
+  if (!device) {
+    throw new Error("Device not found.");
+  }
+  if (device.status === false) {
+    throw new Error("Device is not currently in use.");
   }
 
-  // 3. deviceId로 디바이스 정보를 가져옴
-  const device = await getDevice(driving.deviceId);
-  if (!device.status === 0) {
-    throw new Error("Device is not currently in use.");
+  // 3. deviceId로 driving을 가져옴
+  const drivings = await getDrivingByDeviceId(deviceId);
+  if (!drivings) {
+    throw new Error("Drivings not found.");
   }
 
   // 4. 정상적이면 프론트에서 주행 상태를 업데이트 함.
   return responseFromDrivingStatus({
     payload,
     device,
-    driving,
+    driving: drivings[0],
   });
 };
 
+export const drivingEnd = async (payload) => {
+  // 1. Id 값이 유효한지 확인
+  const { deviceId } = payload;
+  if (!deviceId) {
+    throw new Error("Device ID is required to start driving.");
+  }
+
+  // 2. deviceId로 디바이스 정보를 가져옴
+  let device = await getDevice(deviceId);
+
+  // 디바이스가 존재하는지 확인
+  if (!device) {
+    throw new Error("Device not found.");
+  }
+  // !!디바이스가 사용 중일 때 대기 stop api에서 수정 요청할 예정
+  while (device.status === true) { 
+    device = await getDevice(deviceId);
+  }
+
+  // 3. deviceId로 driving을 가져옴
+  const drivings = await getDrivingByDeviceId(deviceId);
+  if (!drivings) {
+    throw new Error("Drivings not found.");
+  }
+
+  // 4. 시선 값 처리
+  const eyes = await getEyesByDrivingId(drivings[0].id);
+  if (!eyes) {
+    throw new Error("Eyes data not found.");
+  }
+  return responseFromDrivingStop({
+    device,
+    driving: drivings[0],
+    eyes,
+  });
+
+}
+
 export const drivingStop = async (payload) => {
   // 1. payload 값이 정상적으로 다 들어오는 지 확인한다.
-  const { drivingId, mileage, left, right, front } = payload;
-
-  if (!(drivingId && mileage && left && right && front)) {
+  const { deviceId, mileage, bias, headway, left, right, front } = payload;
+  const requiredFields = [deviceId, mileage, left, right, front, bias, headway];
+  if (!requiredFields.every(field => field !== undefined && field !== null)) {
     throw new Error(
-      "All fields are required: drivingId, mileage, left, right, front."
+      "All fields are required: deviceId, mileage, left, right, front, bias, headway."
     );
   }
 
-  // 2. 2. drivingId로 driving을 가져옴
-  const driving = await getDriving(drivingId);
-  if (!driving) {
-    throw new Error("Driving not found.");
+  // 2. deviceId로 디바이스 정보를 가져옴
+  const device = await getDevice(deviceId);
+  if (!device) {
+    throw new Error("Device not found.");
   }
-
-  // 3. deviceId로 디바이스 정보를 가져옴
-  const device = await getDevice(driving.deviceId);
-  if (!device.status === 0) {
+  if (device.status === false) {
     throw new Error("Device is not currently in use.");
   }
 
-  // 4. device 상태를 종료 상태로 업데이트
-  const updateDeviceData = {
-    id: device.id,
-    status: false,
-  };
-  const updatedDevice = await updateDevice(updateDeviceData);
-
-  // 5. 주행 종료로 데이터를 DB에 업데이트
+  // 3. deviceId로 driving을 가져옴
+  const drivings = await getDrivingByDeviceId(deviceId);
+  if (!drivings) {
+    throw new Error("Driving not found.");
+  }
+  // 4. 주행 종료로 데이터를 DB에 업데이트
   const updateDrivingData = {
-    id: driving.id,
+    id: drivings[0].id,
     mileage,
-    bias: ((right - left) / (left + right)) * 100,
+    bias: bias,
+    headway: headway,
     endTime: new Date(),
   };
-  console.log(updateDrivingData);
   const updatedDriving = await updateDriving(updateDrivingData);
 
-  // 6. 눈 상태를 DB에 추가
+  // 5. 눈 상태를 DB에 추가
   const data = {
-    drivingId: driving.id,
+    drivingId: updatedDriving.id,
     left,
     right,
     front,
@@ -139,8 +177,14 @@ export const drivingStop = async (payload) => {
   if (!eyes) {
     throw new Error("Eyes data not found.");
   }
-
-  return responseFromDrivingEnd({
+  // 6. device 상태를 종료 상태로 업데이트
+  const updateDeviceData = {
+    id: device.id,
+    status: false,
+  };
+  console.log(updateDeviceData);
+  const updatedDevice = await updateDevice(updateDeviceData);
+  return responseFromDrivingStop({
     device: updatedDevice,
     driving: updatedDriving,
     eyes,

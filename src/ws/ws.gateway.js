@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import { parse } from "url";
-import { handleSocketMessage, handleTestSocket } from "./ws.controller.js";
+import { handlePrivateSocket, handlePublicSocket } from "./ws.controller.js";
 import { verifyJwt } from "../utils/jwt.util.js";
 
 export const initializeWebSocket = (server) => {
@@ -31,11 +31,10 @@ export const initializeWebSocket = (server) => {
       try {
         const message = JSON.parse(raw.toString());
         const { type } = message;
-
         // 테스트 메시지일 경우 토큰 없이도 처리
-        if (type === "SOCKET:TEST") {
-          const response = await handleTestSocket(message);
-          const data = JSON.stringify({ status: "success", data: response });
+        if (type === "SOCKET:TEST" || type === "DEVICE:HELLO" || type === "DRIVING:STATUS" || type === "DRIVING:STOP") {
+          const response = await handlePublicSocket(message);
+          const data = JSON.stringify({ status: "success", type, data: response });
 
           // 브로드캐스트 처리
           wss.clients.forEach((client) => {
@@ -56,8 +55,8 @@ export const initializeWebSocket = (server) => {
         }
 
         // 나머지 메시지 처리
-        const response = await handleSocketMessage(message, ws.user.userId);
-        const result = JSON.stringify({ status: "success", data: response });
+        const response = await handlePrivateSocket(message, ws.user.userId);
+        const result = JSON.stringify({ status: "success", type, data: response });
 
         // 브로드캐스트 처리
         wss.clients.forEach((client) => {

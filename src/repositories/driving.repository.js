@@ -34,6 +34,14 @@ export const getDrivingByUserId = async (userId, createdAt) => {
   return driving;
 };
 
+export const getDrivingByDeviceId = async (deviceId) => {
+  const driving = await prisma.driving.findMany({
+    where: { deviceId: deviceId },
+    orderBy: { createdAt: "desc" },
+  });
+  return driving;
+};
+
 export const updateDriving = async (data) => {
   const updated = await prisma.driving.update({
     where: { id: data.id },
@@ -71,6 +79,13 @@ export const addEyes = async (data) => {
 export const getEyes = async (eyesId) => {
   const eyes = await prisma.eyes.findFirstOrThrow({
     where: { id: eyesId },
+  });
+  return eyes;
+};
+
+export const getEyesByDrivingId = async (drivingId) => {
+  const eyes = await prisma.eyes.findFirst({
+    where: { drivingId: drivingId },
   });
   return eyes;
 };

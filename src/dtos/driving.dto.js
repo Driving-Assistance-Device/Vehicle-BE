@@ -1,6 +1,6 @@
 export const responseFromDrivingStart = ({ driving, device }) => {
   return {
-    drivingId: driving.id,
+    deviceId: device.id,
     status: device.status,
     mileage: 0,
     startTime: driving.startTime,
@@ -14,7 +14,7 @@ export const responseFromDrivingStart = ({ driving, device }) => {
 
 export const responseFromDrivingStatus = ({ payload, device, driving }) => {
   return {
-    drivingId: payload.drivingId,
+    deviceId: device.id,
     status: device.status,
     mileage: payload.mileage,
     startTime: driving.startTime,
@@ -25,7 +25,7 @@ export const responseFromDrivingStatus = ({ payload, device, driving }) => {
   };
 };
 
-export const responseFromDrivingEnd = ({ driving, device, eyes }) => {
+export const responseFromDrivingStop = ({ driving, device, eyes }) => {
   return {
     drivingId: driving.id,
     status: device.status,
