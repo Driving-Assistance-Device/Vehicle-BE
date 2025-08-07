@@ -36,14 +36,14 @@ export const drivingStart = async (payload, userId) => {
   }
   // 디바이스가 사용 중인지 확인
   console.log("디바이스 상태", device.status);
-  if (device.status === true) {
+  if (device.status === 1) {
     throw new Error("Device is already in use.");
   }
 
-  // 3. 디바이스 상태를 true로 업데이트
+  // 3. 디바이스 상태를 1로 업데이트
   const updateData = {
     id: device.id,
-    status: true,
+    status: 1,
   };
 
   const updatedDevice = await updateDevice(updateData);
@@ -75,7 +75,7 @@ export const drivingStatus = async (payload) => {
   if (!device) {
     throw new Error("Device not found.");
   }
-  if (device.status === false) {
+  if (device.status === 0) {
     throw new Error("Device is not currently in use.");
   }
 
@@ -107,8 +107,12 @@ export const drivingEnd = async (payload) => {
   if (!device) {
     throw new Error("Device not found.");
   }
+  device = await updateDevice({
+    id: device.id,
+    status: 2, // 종료 요청 상태로 업데이트
+  });
   // !!디바이스가 사용 중일 때 대기 stop api에서 수정 요청할 예정
-  while (device.status === true) { 
+  while (device.status === 2) {
     device = await getDevice(deviceId);
   }
 
@@ -146,7 +150,7 @@ export const drivingStop = async (payload) => {
   if (!device) {
     throw new Error("Device not found.");
   }
-  if (device.status === false) {
+  if (device.status === 0) {
     throw new Error("Device is not currently in use.");
   }
 
@@ -180,7 +184,7 @@ export const drivingStop = async (payload) => {
   // 6. device 상태를 종료 상태로 업데이트
   const updateDeviceData = {
     id: device.id,
-    status: false,
+    status: 0,
   };
   console.log(updateDeviceData);
   const updatedDevice = await updateDevice(updateDeviceData);
