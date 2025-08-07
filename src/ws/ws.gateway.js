@@ -35,7 +35,15 @@ export const initializeWebSocket = (server) => {
         // 테스트 메시지일 경우 토큰 없이도 처리
         if (type === "SOCKET:TEST") {
           const response = await handleTestSocket(message);
-          ws.send(JSON.stringify({ status: "success", data: response }));
+          const data = JSON.stringify({ status: "success", data: response });
+
+          // 브로드캐스트 처리
+          wss.clients.forEach((client) => {
+            if (client.readyState === ws.OPEN) {
+              client.send(data);
+            }
+          });
+
           return;
         }
 
@@ -50,7 +58,13 @@ export const initializeWebSocket = (server) => {
         // 나머지 메시지 처리
         const response = await handleSocketMessage(message, ws.user.userId);
         const result = JSON.stringify({ status: "success", data: response });
-        ws.send(result);
+
+        // 브로드캐스트 처리
+        wss.clients.forEach((client) => {
+          if (client.readyState === ws.OPEN) {
+            client.send(result);
+          }
+        });
       } catch (err) {
         ws.send(JSON.stringify({ status: "error", error: err.message }));
       }
