@@ -17,7 +17,7 @@ import {
   getEyes,
   getDrivingByUserId,
   getDrivingByDeviceId,
-  getEyesByDrivingId
+  getEyesByDrivingId,
 } from "../repositories/driving.repository.js";
 
 export const drivingStart = async (payload, userId) => {
@@ -66,17 +66,12 @@ export const drivingStatus = async (payload) => {
   // 1. payload 값이 정상적으로 다 들어오는 지 확인한다.
   const { deviceId, mileage } = payload;
   if (!(deviceId && mileage >= 0)) {
-    throw new Error(
-      "All fields are required: deviceId, mileage."
-    );
+    throw new Error("All fields are required: deviceId, mileage.");
   }
   // 2. deviceId로 디바이스 정보를 가져옴
   const device = await getDevice(deviceId);
   if (!device) {
     throw new Error("Device not found.");
-  }
-  if (device.status === 0) {
-    throw new Error("Device is not currently in use.");
   }
 
   // 3. deviceId로 driving을 가져옴
@@ -132,14 +127,13 @@ export const drivingEnd = async (payload) => {
     driving: drivings[0],
     eyes,
   });
-
-}
+};
 
 export const drivingStop = async (payload) => {
   // 1. payload 값이 정상적으로 다 들어오는 지 확인한다.
   const { deviceId, mileage, bias, headway, left, right, front } = payload;
   const requiredFields = [deviceId, mileage, left, right, front, bias, headway];
-  if (!requiredFields.every(field => field !== undefined && field !== null)) {
+  if (!requiredFields.every((field) => field !== undefined && field !== null)) {
     throw new Error(
       "All fields are required: deviceId, mileage, left, right, front, bias, headway."
     );
