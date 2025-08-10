@@ -27,7 +27,7 @@ export const responseFromDrivingStatus = ({ payload, device, driving }) => {
 
 export const responseFromDrivingStop = ({ driving, device, eyes }) => {
   return {
-    drivingId: driving.id,
+    deviceId: device.id,
     status: device.status,
     mileage: driving.mileage,
     startTime: driving.startTime,
