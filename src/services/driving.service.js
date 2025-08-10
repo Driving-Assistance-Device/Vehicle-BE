@@ -18,6 +18,8 @@ import {
   getDrivingByUserId,
   getDrivingByDeviceId,
   getEyesByDrivingId,
+  deleteDriving,
+  deleteEyes,
 } from "../repositories/driving.repository.js";
 
 export const drivingStart = async (payload, userId) => {
@@ -119,9 +121,6 @@ export const drivingEnd = async (payload) => {
 
   // 4. 시선 값 처리
   const eyes = await getEyesByDrivingId(drivings[0].id);
-  if (!eyes) {
-    throw new Error("Eyes data not found.");
-  }
   return responseFromDrivingStop({
     device,
     driving: drivings[0],
@@ -172,15 +171,11 @@ export const drivingStop = async (payload) => {
   };
   const eyesId = await addEyes(data);
   const eyes = await getEyes(eyesId);
-  if (!eyes) {
-    throw new Error("Eyes data not found.");
-  }
   // 6. device 상태를 종료 상태로 업데이트
   const updateDeviceData = {
     id: device.id,
     status: 0,
   };
-  console.log(updateDeviceData);
   const updatedDevice = await updateDevice(updateDeviceData);
   return responseFromDrivingStop({
     device: updatedDevice,
@@ -195,7 +190,9 @@ export const drivingOne = async (userId) => {
     throw new InvalidRequestError("No driving records found for this user.");
   }
   const driving = drivings[0];
-  return responseFromDriving({ driving });
+
+  const eyes = await getEyesByDrivingId(driving.id);
+  return responseFromDriving({ driving, eyes });
 };
 
 export const drivingStatistics = async (userId, createdAt) => {
@@ -204,7 +201,17 @@ export const drivingStatistics = async (userId, createdAt) => {
     throw new InvalidRequestError("No driving records found for this user.");
   }
 
-  return responseFromDrivings({ drivings });
+  const drivingWithEyes = [];
+  for (const driving of drivings) {
+    let eyesData = await getEyesByDrivingId(driving.id);
+    drivingWithEyes.push({
+      ...driving,
+      left: eyesData?.left ?? 0,
+      right: eyesData?.right ?? 0,
+      front: eyesData?.front ?? 0,
+    });
+  }
+  return responseFromDrivings({ drivingWithEyes });
 };
 
 export const drivingTotalCount = async (userId) => {
@@ -220,4 +227,26 @@ export const drivingTotalCount = async (userId) => {
     count,
     totalDistance,
   };
+};
+
+export const drivingInfo = async (drivingId) => {
+  const driving = await getDriving(drivingId);
+  if (!driving) {
+    throw new InvalidRequestError("Driving record not found.");
+  }
+  const eyes = await getEyesByDrivingId(driving.id);
+  return responseFromDriving({ driving, eyes });
+};
+
+export const drivingDeletion = async (drivingId) => {
+  const driving = await getDriving(drivingId);
+  if (!driving) {
+    throw new InvalidRequestError("Driving record not found.");
+  }
+  const eyes = await getEyesByDrivingId(drivingId);
+  if (eyes) {
+    await deleteEyes(eyes.id);
+  }
+  await deleteDriving(drivingId);
+  return { message: "Driving record deleted successfully." };
 };

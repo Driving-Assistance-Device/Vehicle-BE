@@ -89,3 +89,11 @@ export const getEyesByDrivingId = async (drivingId) => {
   });
   return eyes;
 };
+
+export const deleteDriving = async (drivingId) => {
+  await prisma.driving.delete({ where: { id: drivingId } });
+};
+
+export const deleteEyes = async (eyesId) => {
+  await prisma.eyes.delete({ where: { id: eyesId } });
+};
