@@ -15,7 +15,7 @@
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)                                                      | \* 서버 사이드 JavaScript 환경입니다.                                                                                                               |
 | ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)                                    | \* Node.js를 위한 웹 애플리케이션 프레임워크입니다.                                                                                                 |
-| ![Socket.io](https://img.shields.io/badge/socket.io-%23404d59.svg?style=for-the-badge&logo=socketdotio&logoColor=%2361DAFB)                                  | \* 실시간 통신을 위한 프레임워크입니다.                                                                                                             |
+| ![WS](https://img.shields.io/badge/ws-%23404d59.svg?style=for-the-badge&logo=ws&logoColor=%2361DAFB)                                                         | \* 실시간 통신을 위한 웹소켓 라이브러리입니다.                                                                                                             |
 | ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=https://img.icons8.com/m_rounded/512/amazon-web-services.png&logoColor=white) | _ EC2: 가상 서버 인스턴스를 제공하는 AWS 서비스입니다. <br> _ S3: 객체 스토리지 서비스입니다. <br> \* RDS: 관리형 관계형 데이터베이스 서비스입니다. |
 | ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)                                                       | \* 관계형 데이터베이스 서비스입니다.                                                                                                                |
 | ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)                                                        | \* ORM(Object-Relational Mapping) 라이브러리입니다.                                                                                                 |
@@ -60,27 +60,48 @@ ex) #이슈번호, #이슈번호
 
 ```markdown
 📦 project/
-┃ 📂prisma
+┃ 📂prisma/
 ┃ ┗ 📜schema.prisma
 ┣ 📂src/
+┃ ┣ 📂routes/
+┃ ┃ ┗ 📜index.js
+┃ ┃ ┗ 📜auth.services.js
+┃ ┃ ┗ 📜driving.services.js
+┃ ┃ ┗ 📜user.services.js
 ┃ ┣ 📂controllers/
+┃ ┃ ┗ 📜auth.controller.js
+┃ ┃ ┗ 📜driving.controller.js
 ┃ ┃ ┗ 📜user.controller.js
-┃ ┣ 📂sockets/
-┃ ┃ ┗ 📜raspi.socket.js
+┃ ┣ 📂dtos/
+┃ ┃ ┗ 📜auth.dto.js
+┃ ┃ ┗ 📜device.dto.js
+┃ ┃ ┗ 📜driving.dto.js
+┃ ┃ ┗ 📜user.dto.js
 ┃ ┣ 📂services/
+┃ ┃ ┗ 📜auth.services.js
+┃ ┃ ┗ 📜device.services.js
+┃ ┃ ┗ 📜driving.services.js
 ┃ ┃ ┗ 📜user.services.js
 ┃ ┣ 📂repositories/
+┃ ┃ ┗ 📜auth.repository.js
+┃ ┃ ┗ 📜device.repository.js
+┃ ┃ ┗ 📜driving.repository.js
 ┃ ┃ ┗ 📜user.repository.js
-┃ ┣ 📂dtos/
-┃ ┃ ┗ 📜user.dto.js
-┃ ┣ 📂sockets/
-┃ ┃ ┗ 📜user.socket.js
 ┃ ┣ 📂middlewares/
+┃ ┃ ┗ 📜auth.middleware.js
 ┃ ┣ 📂utils/
+┃ ┃ ┗ 📜crypto.util.js
+┃ ┃ ┗ 📜jwt.util.js
+┃ ┣ 📂errors/
+┃ ┃ ┣ 📜auth.errors.js
+┃ ┃ ┣ 📜device.errors.js
+┃ ┃ ┣ 📜driving.errors.js
+┃ ┃ ┣ 📜user.errors.js
 ┃ ┣ 📂db/
 ┃ ┃ ┣ 📜db.config.js
-┃ ┃ ┗ 📜redis.js
-┃ ┗ 📜app.js
+┃ ┗ 📜index.js
+┃ 📂test/
+┃ ┗ 📜socket.test.js
 ┣ 📜.env
 ┗ 📜README.md
 ```
