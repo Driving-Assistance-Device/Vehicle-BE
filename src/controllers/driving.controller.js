@@ -24,6 +24,11 @@ export const handleDriving = async (req, res, next) => {
                 properties: {
                   drivingId: { type: 'number', example: 1 },
                   mileage: { type: 'number', example: '100' },
+                  headway: { type: 'number', example: '2' },
+                  bias: { type: 'number', example: '0.5' },
+                  left: { type: 'number', example: '10' },
+                  right: { type: 'number', example: '10' },
+                  front: { type: 'number', example: '10' },
                   startTime: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
                   endTime: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
                   createdAt: { type: 'string', example: '2023-01-01T00:00:00.000Z' }
@@ -165,6 +170,11 @@ export const handleDrivings = async (req, res, next) => {
                   properties: {
                     drivingId: { type: 'number', example: 1 },
                     mileage: { type: 'number', example: '100' },
+                    headway: { type: 'number', example: '2' },
+                    bias: { type: 'number', example: '0.5' },
+                    left: { type: 'number', example: '10' },
+                    right: { type: 'number', example: '10' },
+                    front: { type: 'number', example: '10' },
                     startTime: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
                     endTime: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
                     createdAt: { type: 'string', example: '2023-01-01T00:00:00.000Z' }

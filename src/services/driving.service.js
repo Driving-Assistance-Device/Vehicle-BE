@@ -195,7 +195,14 @@ export const drivingOne = async (userId) => {
     throw new InvalidRequestError("No driving records found for this user.");
   }
   const driving = drivings[0];
-  return responseFromDriving({ driving });
+
+  const eyes = await getEyesByDrivingId(driving.id);
+  if (!eyes) {
+    throw new InvalidRequestError(
+      "No eyes data found for this driving record."
+    );
+  }
+  return responseFromDriving({ driving, eyes });
 };
 
 export const drivingStatistics = async (userId, createdAt) => {
@@ -204,7 +211,17 @@ export const drivingStatistics = async (userId, createdAt) => {
     throw new InvalidRequestError("No driving records found for this user.");
   }
 
-  return responseFromDrivings({ drivings });
+  const drivingWithEyes = [];
+  for (const driving of drivings) {
+    let eyesData = await getEyesByDrivingId(driving.id);
+    drivingWithEyes.push({
+      ...driving,
+      left: eyesData?.left ?? 0,
+      right: eyesData?.right ?? 0,
+      front: eyesData?.front ?? 0,
+    });
+  }
+  return responseFromDrivings({ drivingWithEyes });
 };
 
 export const drivingTotalCount = async (userId) => {
