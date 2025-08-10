@@ -32,9 +32,9 @@ export const responseFromDrivingStop = ({ driving, device, eyes }) => {
     mileage: driving.mileage,
     startTime: driving.startTime,
     endTime: driving.endTime ?? driving.startTime,
-    left: eyes.left,
-    right: eyes.right,
-    front: eyes.front,
+    left: eyes?.left ?? 0,
+    right: eyes?.right ?? 0,
+    front: eyes?.front ?? 0,
   };
 };
 
