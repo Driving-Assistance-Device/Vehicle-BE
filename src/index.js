@@ -68,7 +68,7 @@ app.get("/openapi.json", async (req, res, next) => {
   const doc = {
     info: {
       title: "MJU RATS",
-      description: "시각 장애인을 위한 차량 보조 서비스",
+      description: "초보 운전자를 위한 차량 보조 서비스",
     },
     host: `${protocol}://${host}`,
     components: {
